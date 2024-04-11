@@ -1,0 +1,57 @@
+<robot name="camera_calibrator">
+
+
+  <gazebo reference="image_calibration_link">
+     <material>calibration</material>
+  </gazebo>
+
+  <link name="impact_camera_calibration_base_link"/>
+
+  <joint name="impact_camera_calibration_base_link_joint" type="fixed">
+        <parent link="impact_camera_calibration_base_link"/>
+        <child link="impact_camera_calibration_link"/>
+        <origin xyz="-0.02 0.1097 0.0272" rpy="0 0 0"/>
+    </joint>
+   
+    <link name="impact_camera_calibration_link">
+    <inertial>
+      <mass value="0.01"/>
+      <origin xyz="0.0 0 0" rpy=" 0 0 0"/>
+      <inertia
+          ixx="0" ixy="0" ixz="0"
+          iyy="0" iyz="0"
+          izz="0"
+      />
+    </inertial>
+        <visual>
+            <geometry>
+                <box size="0.2985 0.27940 0.005"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.2985 0.27940 0.005"/>
+            </geometry>
+        </collision>
+    </link>
+      <joint name="image_link_joint" type="fixed">
+        <parent link="impact_camera_calibration_link"/>
+        <child link="image_calibration_link"/>
+        <origin xyz="0 0.025 -0.005" rpy="0 0 0"/>
+    </joint>
+    <link name="image_calibration_link">
+    <origin  xyz="0 0 0"  rpy="0 0 0" />
+        <visual>
+            <geometry>
+                <box size="0.2794 0.2032 0.0001"/>
+            </geometry>
+            <material name="White" />
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.2794 0.2159 0.0001"/>
+            </geometry>
+        </collision>
+    </link>
+
+</robot>

@@ -1,0 +1,19 @@
+<robot name="camera_calibrator">
+  <link name="impact_camera_calibration_base_link"/>
+  <joint name="impact_camera_calibration_base_link_joint" type="fixed">
+    <parent link="impact_camera_calibration_base_link"/>
+    <child link="impact_camera_calibration_link"/>
+    <origin rpy="0 1.5707963267948966 0" xyz="0 -0.55 1.0"/>
+  </joint>
+  <material name="red">
+    <color rgba="0 0 0 1"/>
+  </material>
+  <link name="impact_camera_calibration_link">
+    <visual>
+      <geometry>
+        <box size="0.02985 0.027.94 0.0002"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+  </link>
+</robot>

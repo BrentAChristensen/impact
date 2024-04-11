@@ -1,0 +1,27 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/brent/dev/ar3_ws/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/brent/dev/ar3_ws/src/ar3/ar3_hardware_drivers/include/**",
+        "/home/brent/dev/ar3_ws/src/ar3/ar3_hardware_interface/include/**",
+        "/home/brent/dev/ar3_ws/src/find-object/include/**",
+        "/opt/ros/noetic/share/realsense_gazebo_plugin/include/**",
+        "/home/brent/dev/ar3_ws/src/wheeltec_gripper/wheeltec_gripper_driver/include/**",
+        "/home/brent/dev/ar3_ws/src/wheeltec_gripper/wheeltec_hardware_interface/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

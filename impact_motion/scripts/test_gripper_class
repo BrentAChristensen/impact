@@ -1,0 +1,13 @@
+from gripper_simple import Gripper
+import rospy
+
+g = Gripper()
+g.Spin()
+rospy.sleep(1)
+g.close()
+rospy.sleep(5)
+print (g.state)
+g.open()
+rospy.sleep(5)
+print (g.state)
+

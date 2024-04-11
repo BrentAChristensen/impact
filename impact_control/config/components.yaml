@@ -1,0 +1,1 @@
+controllers: [ar3_controller, wheeltec_gripper_controller, joint_state_controller]

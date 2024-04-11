@@ -1,0 +1,460 @@
+<?xml version="1.0"?>
+<robot  name="ar3" >
+ <material  name="Black" >
+  <color  rgba="0 0 0 1" />
+ </material>
+ <material  name="Blue" >
+  <color  rgba="0.0 0.0 0.8 1.0" />
+ </material>
+ <material  name="Green" >
+  <color  rgba="0.0 0.8 0.0 1.0" />
+ </material>
+ <material  name="Grey" >
+  <color  rgba="0.4 0.4 0.4 1.0" />
+ </material>
+ <material  name="White" >
+  <color  rgba="1.0 1.0 1.0 1.0" />
+ </material>
+ <material  name="Red" >
+  <color  rgba="0.8 0.0 0.0 1.0" />
+ </material>
+ <material  name="Yellow" >
+  <color  rgba="1 1 0 1" />
+ </material>
+ <material  name="gripper_base_color" >
+  <color  rgba="0.0 0.8 0.0 1.0" />
+ </material>
+ <material  name="fingers_color" >
+  <color  rgba="0.0 0.8 0.0 1.0" />
+ </material>
+ <gazebo >
+  <plugin  name="gazebo_ros_control"  filename="libgazebo_ros_control.so" />
+ </gazebo>
+ <link  name="world" />
+ <joint  type="fixed"  name="world_joint" >
+  <parent  link="world" />
+  <child  link="ar3_base_link" />
+  <origin  xyz="0 0 0"  rpy="0 0 0" />
+ </joint>
+ <gazebo    reference="ar3_base_link" >
+  <material>Gazebo/Yellow</material>
+ </gazebo>
+ <gazebo    reference="link_1" >
+  <material  name="Gazebo/Grey" />
+ </gazebo>
+ <gazebo    reference="link_2" >
+  <material  name="Gazebo/Grey" />
+ </gazebo>
+ <gazebo    reference="link_3" >
+  <material  name="Gazebo/Grey" />
+ </gazebo>
+ <gazebo    reference="link_5" >
+  <material  name="Gazebo/Grey" />
+ </gazebo>
+ <gazebo    reference="link_6" >
+  <material  name="Gazebo/Grey" />
+ </gazebo>
+ <gazebo />
+ <link  name="ar3_base_link" >
+  <inertial >
+   <mass  value="0.7102" />
+   <origin  xyz="-4.6941E-06 0.054174 0.038824"  rpy="0 0 0" />
+   <inertia  iyz="-0.00036051"  ixx="0.0039943"  izz="0.0042554"  ixz="-5.7364E-08"  ixy="3.697E-07"  iyy="0.0014946" />
+  </inertial>
+  <visual >
+   <origin  xyz="0 0 0"  rpy="0 0 0" />
+   <geometry  name="baselink geometry" >
+    <mesh  filename="package://ar3_description/meshes/base_link.STL" scale="1 1 1" />
+   </geometry>
+   <material  name="Yellow" />
+  </visual>
+  <collision >
+   <origin  xyz="0 0 0"  rpy="0 0 0" />
+   <geometry >
+    <mesh  filename="package://ar3_description/meshes/base_link.STL" scale="1 1 1" />
+   </geometry>
+  </collision>
+ </link>
+ <link  name="link_1" >
+  <inertial >
+   <mass  value="0.88065" />
+   <origin  xyz="-0.022706 0.04294 -0.12205"  rpy="0 0 0" />
+   <inertia  iyz="0.0010848"  ixx="0.0034"  izz="0.0027077"  ixz="-0.00089231"  ixy="0.00042296"  iyy="0.0041778" />
+  </inertial>
+  <visual >
+   <origin  xyz="0 0 0"  rpy="0 0 0" />
+   <geometry  name="link_1 geometry" >
+    <mesh  filename="package://ar3_description/meshes/link_1.STL" scale="1 1 1" />
+   </geometry>
+   <material  name="Yellow" />
+  </visual>
+  <collision >
+   <origin  xyz="0 0 0"  rpy="0 0 0" />
+   <geometry >
+    <mesh  filename="package://ar3_description/meshes/link_1.STL" scale="1 1 1" />
+   </geometry>
+  </collision>
+ </link>
+ <link  name="link_2" >
+  <inertial >
+   <mass  value="0.57738" />
+   <origin  xyz="0.064818 -0.11189 -0.038671"  rpy="0 0 0" />
+   <inertia  iyz="-0.00056569"  ixx="0.0047312"  izz="0.0056129"  ixz="0.00032144"  ixy="0.0022624"  iyy="0.0020836" />
+  </inertial>
+  <visual >
+   <origin  xyz="0 0 0"  rpy="0 0 0" />
+   <geometry  name="link_2 geometry" >
+    <mesh  filename="package://ar3_description/meshes/link_2.STL" scale="1 1 1" />
+   </geometry>
+   <material  name="Yellow" />
+  </visual>
+  <collision >
+   <origin  xyz="0 0 0"  rpy="0 0 0" />
+   <geometry >
+    <mesh  filename="package://ar3_description/meshes/link_2.STL" scale="1 1 1" />
+   </geometry>
+  </collision>
+ </link>
+ <link  name="link_3" >
+  <inertial >
+   <mass  value="0.1787" />
+   <origin  xyz="-0.00029765 -0.023661 -0.0019125"  rpy="0 0 0" />
+   <inertia  iyz="2.9256E-05"  ixx="0.0001685"  izz="0.00020744"  ixz="5.6885E-06"  ixy="-2.7713E-05"  iyy="0.00012865" />
+  </inertial>
+  <visual >
+   <origin  xyz="0 0 0"  rpy="0 0 0" />
+   <geometry  name="link_3 geometry" >
+    <mesh  filename="package://ar3_description/meshes/link_3.STL" scale="1 1 1" />
+   </geometry>
+   <material  name="Yellow" />
+  </visual>
+  <collision >
+   <origin  xyz="0 0 0"  rpy="0 0 0" />
+   <geometry >
+    <mesh  filename="package://ar3_description/meshes/link_3.STL" scale="1 1 1" />
+   </geometry>
+  </collision>
+ </link>
+ <link  name="link_4" >
+  <inertial >
+   <mass  value="0.34936" />
+   <origin  xyz="-0.0016798 -0.00057319 -0.074404"  rpy="0 0 0" />
+   <inertia  iyz="-2.3301E-05"  ixx="0.0030532"  izz="0.00022264"  ixz="-7.0047E-05"  ixy="-1.8615E-05"  iyy="0.0031033" />
+  </inertial>
+  <visual >
+   <origin  xyz="0 0 0"  rpy="0 0 0" />
+   <geometry  name="link_4 geometry" >
+    <mesh  filename="package://ar3_description/meshes/link_4.STL" scale="1 1 1" />
+   </geometry>
+   <material  name="Yellow" />
+  </visual>
+  <collision >
+   <origin  xyz="0 0 0"  rpy="0 0 0" />
+   <geometry >
+    <mesh  filename="package://ar3_description/meshes/link_4.STL" scale="1 1 1" />
+   </geometry>
+  </collision>
+ </link>
+ <link  name="link_5" >
+  <inertial >
+   <mass  value="0.11562" />
+   <origin  xyz="0.0015066 -1.3102E-05 -0.012585"  rpy="0 0 0" />
+   <inertia  iyz="1.4437E-08"  ixx="5.5035E-05"  izz="5.2518E-05"  ixz="-2.6243E-06"  ixy="-1.019E-08"  iyy="8.2921E-05" />
+  </inertial>
+  <visual >
+   <origin  xyz="0 0 0"  rpy="0 0 0" />
+   <geometry  name="link_5 geometry" >
+    <mesh  filename="package://ar3_description/meshes/link_5.STL" scale="1 1 1" />
+   </geometry>
+   <material  name="Yellow" />
+  </visual>
+  <collision >
+   <origin  xyz="0 0 0"  rpy="0 0 0" />
+   <geometry >
+    <mesh  filename="package://ar3_description/meshes/link_5.STL" scale="1 1 1" />
+   </geometry>
+  </collision>
+ </link>
+ <link  name="link_6" >
+  <inertial >
+   <mass  value="0.013863" />
+   <origin  xyz="2.9287E-10 -1.6472E-09 0.0091432"  rpy="0 0 0" />
+   <inertia  iyz="6.3369e-09"  ixx="1.3596e-06"  izz="2.4332e-06"  ixz="5.7102e-14"  ixy="3.0585e-13"  iyy="1.7157e-06" />
+  </inertial>
+  <visual >
+   <origin  xyz="0 0 0"  rpy="0 0 0" />
+   <geometry  name="link_6 geometry" >
+    <mesh  filename="package://ar3_description/meshes/link_6.STL" scale="1 1 1" />
+   </geometry>
+   <material  name="Yellow" />
+  </visual>
+  <collision >
+   <origin  xyz="0 0 0"  rpy="0 0 0" />
+   <geometry >
+    <mesh  filename="package://ar3_description/meshes/link_6.STL" scale="1 1 1" />
+   </geometry>
+  </collision>
+ </link>
+ <link  name="ar3_end_link" >
+  <inertial >
+   <mass  value="0.01" />
+   <origin  xyz="0.0123620482957 4.04067993065027E-06 6.38421238097209E-09"  rpy="0 0 0" />
+   <inertia  iyz="0.000000"  ixx="0.000380"  izz="0.001171"  ixz="0.000000"  ixy="0.000000"  iyy="0.001110" />
+  </inertial>
+  <visual >
+   <origin  xyz="0 0 0"  rpy="0 0 0" />
+   <geometry  name="box_geometry" >
+    <box  size="0.002 0.002 0.002" />
+   </geometry>
+   <material  name="Black" />
+  </visual>
+  <collision >
+   <origin  xyz="0 0 0"  rpy="0 0 0" />
+   <geometry >
+    <box  size="0.002 0.002 0.002" />
+   </geometry>
+  </collision>
+ </link>
+ <joint  type="revolute"  name="ar3_base_link_joint" >
+  <axis  xyz="0 0 1" />
+  <limit  velocity="100"  lower="-2.96706"  upper="2.96706"  effort="100" />
+  <dynamics  friction="0.1"  damping="0.0" />
+  <origin  xyz="0 0 0.003445"  rpy="3.141516 0 0" />
+  <parent  link="ar3_base_link" />
+  <child  link="link_1" />
+ </joint>
+ <joint  type="revolute"  name="joint_2" >
+  <axis  xyz="0 0 -1" />
+  <limit  velocity="100"  lower="-0.07002801"  upper="1.570758"  effort="100" />
+  <dynamics  friction="0.1"  damping="0.0" />
+  <origin  xyz="0 0.064146 -0.16608"  rpy="1.5708 0.5236 -1.5708" />
+  <parent  link="link_1" />
+  <child  link="link_2" />
+ </joint>
+ <joint  type="revolute"  name="joint_3" >
+  <axis  xyz="0 0 -1" />
+  <limit  velocity="100"  lower="0.0174533"  upper="2.5080381"  effort="100" />
+  <dynamics  friction="0.1"  damping="0.0" />
+  <origin  xyz="0.1525 -0.26414 0"  rpy="3.3431E-16 -1.4164E-16 -1.4953816339" />
+  <parent  link="link_2" />
+  <child  link="link_3" />
+ </joint>
+ <joint  type="revolute"  name="joint_4" >
+  <axis  xyz="0 0 -1" />
+  <limit  velocity="100"  lower="-2.8710666"  upper="2.8710666"  effort="100" />
+  <dynamics  friction="0.1"  damping="0.0" />
+  <origin  xyz="0 0 0.00675"  rpy="1.5708 -1.2554 -1.5708" />
+  <parent  link="link_3" />
+  <child  link="link_4" />
+ </joint>
+ <joint  type="revolute"  name="joint_5" >
+  <axis  xyz="1 0 0" />
+  <limit  velocity="100"  lower="-1.81776042"  upper="1.81776042"  effort="100" />
+  <dynamics  friction="0.6"  damping="0.0" />
+  <origin  xyz="0 0 -0.22225"  rpy="3.1416 0 -2.8262" />
+  <parent  link="link_4" />
+  <child  link="link_5" />
+ </joint>
+ <joint  type="revolute"  name="joint_6" >
+  <axis  xyz="0 0 1" />
+  <limit  velocity="100"  lower="-2.5848326"  upper="2.5848326"  effort="100" />
+  <dynamics  friction="0.6"  damping="0.0" />
+  <origin  xyz="-0.000294 0 0.02117"  rpy="0 0 0" />
+  <parent  link="link_5" />
+  <child  link="link_6" />
+ </joint>
+ <joint  type="fixed"  name="ar3_end_link_joint" >
+  <axis  xyz="0 0 0" />
+  <limit  velocity="1.0"  lower="0.0"  upper="3.14"  effort="30" />
+  <dynamics  friction="0.0"  damping="0.0" />
+  <origin  xyz="0.0175 -0.0090 -0.0110"  rpy="0 0 0.0365" />
+  <parent  link="link_6" />
+  <child  link="ar3_end_link" />
+ </joint>
+ <transmission  name="trans_joint_1" >
+  <type >
+   transmission_interface/SimpleTransmission
+  </type>
+  <joint  name="ar3_base_link_joint" >
+   <hardwareInterface >
+    hardware_interface/PositionJointInterface
+   </hardwareInterface>
+  </joint>
+  <actuator  name="motor_joint_1" >
+   <mechanicalReduction >
+    1
+   </mechanicalReduction>
+  </actuator>
+ </transmission>
+ <transmission  name="trans_joint_2" >
+  <type >
+   transmission_interface/SimpleTransmission
+  </type>
+  <joint  name="joint_2" >
+   <hardwareInterface >
+    hardware_interface/PositionJointInterface
+   </hardwareInterface>
+  </joint>
+  <actuator  name="motor_joint_2" >
+   <mechanicalReduction >
+    1
+   </mechanicalReduction>
+  </actuator>
+ </transmission>
+ <transmission  name="trans_joint_3" >
+  <type >
+   transmission_interface/SimpleTransmission
+  </type>
+  <joint  name="joint_3" >
+   <hardwareInterface >
+    hardware_interface/PositionJointInterface
+   </hardwareInterface>
+  </joint>
+  <actuator  name="motor_joint_3" >
+   <mechanicalReduction >
+    1
+   </mechanicalReduction>
+  </actuator>
+ </transmission>
+ <transmission  name="trans_joint_4" >
+  <type >
+   transmission_interface/SimpleTransmission
+  </type>
+  <joint  name="joint_4" >
+   <hardwareInterface >
+    hardware_interface/PositionJointInterface
+   </hardwareInterface>
+  </joint>
+  <actuator  name="motor_joint_4" >
+   <mechanicalReduction >
+    1
+   </mechanicalReduction>
+  </actuator>
+ </transmission>
+ <transmission  name="trans_joint_5" >
+  <type >
+   transmission_interface/SimpleTransmission
+  </type>
+  <joint  name="joint_5" >
+   <hardwareInterface >
+    hardware_interface/PositionJointInterface
+   </hardwareInterface>
+  </joint>
+  <actuator  name="motor_joint_5" >
+   <mechanicalReduction >
+    1
+   </mechanicalReduction>
+  </actuator>
+ </transmission>
+ <transmission  name="trans_joint_6" >
+  <type >
+   transmission_interface/SimpleTransmission
+  </type>
+  <joint  name="joint_6" >
+   <hardwareInterface >
+    hardware_interface/PositionJointInterface
+   </hardwareInterface>
+  </joint>
+  <actuator  name="motor_joint_6" >
+   <mechanicalReduction >
+    1
+   </mechanicalReduction>
+  </actuator>
+ </transmission>
+ <gazebo />
+ <joint  type="fixed"  name="impact_camera_calibration_end_link_joint" >
+  <parent  link="ar3_end_link" />
+  <child  link="impact_camera_calibration_base_link" />
+ </joint>
+ <gazebo />
+ <joint  type="fixed"  name="realsense2_end_link_joint" >
+  <parent  link="world" />
+  <child  link="realsense2_base_link" />
+ </joint>
+ <gazebo reference="image_calibration_link">
+    <material>calibration</material>
+  </gazebo>
+  <link name="impact_camera_calibration_base_link" />
+  <joint name="impact_camera_calibration_base_link_joint" type="fixed">
+    <parent link="impact_camera_calibration_base_link" />
+    <child link="impact_camera_calibration_link" />
+    <origin rpy="0 0 0" xyz="-0.02 0.1097 0.0272" />
+  </joint>
+  <link name="impact_camera_calibration_link">
+    <inertial>
+      <mass value="0.01" />
+      <origin rpy=" 0 0 0" xyz="0.0 0 0" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+    <visual>
+      <geometry>
+        <box size="0.2985 0.27940 0.005" />
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.2985 0.27940 0.005" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="image_link_joint" type="fixed">
+    <parent link="impact_camera_calibration_link" />
+    <child link="image_calibration_link" />
+    <origin rpy="0 1.5707963267948966 0" xyz="0 0.025 -0.005" />
+  </joint>
+  <link name="image_calibration_link">
+    <origin rpy="0 0 0" xyz="0 0 0" />
+    <visual>
+      <geometry>
+        <box size="0.2794 0.2032 0.0001" />
+      </geometry>
+      <material name="White" />
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.2794 0.2159 0.0001" />
+      </geometry>
+    </collision>
+  </link>
+<material name="aluminum">
+    <color rgba="0.5 0.5 0.5 1" />
+  </material>
+  <material name="plastic">
+    <color rgba="0.1 0.1 0.1 1" />
+  </material>
+  <link name="realsense2_base_link" />
+  
+  <joint name="camera_joint" type="fixed">
+    <origin rpy="0 1.5707963267948966 0" xyz="0 -0.55 1.0" />
+    <parent link="realsense2_base_link" />
+    <child link="camera_bottom_screw_frame" />
+  </joint>
+  <link name="camera_bottom_screw_frame" />
+  <joint name="camera_link_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.010600000000000002 0.0175 0.0125" />
+    <parent link="camera_bottom_screw_frame" />
+    <child link="camera_link" />
+  </joint>
+  <link name="camera_link">
+    <visual>
+      
+      <origin rpy="1.5707963267948966 0 1.5707963267948966" xyz="0.0043 -0.0175 0" />
+      <geometry>
+        <mesh filename="package://realsense2_description/meshes/d435.dae" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 -0.0175 0" />
+      <geometry>
+        <box size="0.02505 0.09 0.025" />
+      </geometry>
+    </collision>
+    <inertial>
+      
+      <mass value="0.072" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.003881243" ixy="0.0" ixz="0.0" iyy="0.000498940" iyz="0.0" izz="0.003879257" />
+    </inertial>
+  </link>
+
+</robot>
