@@ -6,6 +6,11 @@ clone the following packages
 - realsense_gazebo_plugin
 - roboticsgroup_upatras_gazebo_plugins
 - rviz_visual_tools
+
+- cd <package name>
+- create a build folder
+- run: $cmake .. -DCMAKE_INSTALL_PREFIX=/opt/ros/noetic/share
+
 use -DCMAKE_INSTALL_PREFIX=/your/install/path for each package placed in the share folder
 - gazebo-pkgs
 - general-messages-pkgs
