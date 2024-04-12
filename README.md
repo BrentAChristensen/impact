@@ -10,6 +10,7 @@ clone the following packages
 - cd <package name>
 - create a build folder
 - run: $cmake .. -DCMAKE_INSTALL_PREFIX=/opt/ros/noetic/share
+- run: $sudo make install
 
 use -DCMAKE_INSTALL_PREFIX=/your/install/path for each package placed in the share folder
 - gazebo-pkgs
