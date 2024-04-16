@@ -19,6 +19,8 @@ from find_object_2d.msg import ObjectsStamped
 import tf2_ros
 import tf2_geometry_msgs
 from std_msgs.msg import String
+from gazebo_conveyor.srv import ConveyorBeltControl
+from time import sleep
 
 
 
@@ -68,60 +70,33 @@ class Commanders():
          return str(i)
 
 
+class Conveyor():
+
+    def __init__(self):
+        rospy.wait_for_service('/conveyor/control')
+        print('converyor control running')
+
+    def conveyor_service_result(self,msg):
+        print(msg)
+        return msg
+
+    def speed(self,value):
+        try:
+            conveyor_speed = rospy.ServiceProxy('/conveyor/control', ConveyorBeltControl)
+            result = conveyor_speed(value)
+            return 'true'
+        except rospy.ServiceException as e:
+            print("Service call failed: %s"%e)
 
 
 class Plan():
     commanders = Commanders()
-    objects = []
     end_effector = ""
 
     def __init__(self,*argv):        
-       roscpp_initialize(sys.argv)
-       rospy.init_node('impact_motion', anonymous=True)
-       self.start_object_listner
-       moveit_robot_state = RobotState()
        for arg in argv:
             self.commanders.add(arg)
        
-    def __del__(self):
-        roscpp_shutdown()
-           
-    def start_object_listner(self):
-        self.objFramePrefix = "object"
-        self.targetFrameId = rospy.get_param("~target_frame_id", "ar3_base_link")
-        self.objFramePrefix = rospy.get_param("~object_prefix", self.objFramePrefix)
-        self.subs = rospy.Subscriber("objectsStamped", ObjectsStamped, self.objectsDetectedCallback)
-        self.tf_buffer = tf2_ros.Buffer()
-        self.tfListener = tf2_ros.TransformListener(self.tf_buffer)
-
-    def objectsDetectedCallback(self,msg):
-        
-        if msg.objects.data:
-            multiSubId = ord('b')
-            previousId = -1
-            for i in range(0, len(msg.objects.data), 12):
-                # get data
-                id = int(msg.objects.data[i])
-
-                multiSuffix = ""
-                if id == previousId:
-                    multiSuffix = "" + chr(multiSubId)
-                    multiSubId += 1
-                else:
-                    multiSubId = ord('b')
-                previousId = id
-                print(msg)
-                # "object1", "object_1_b", "object_1_c", "object_2"
-                objectFrameId = "{}{}{}".format(self.objFramePrefix, '_' + str(id), multiSuffix)
-                if objectFrameId in self.objects:
-                    print(str(len(self.objects)))
-                else:
-                  print()  
-                  self.objects.append(objectFrameId)
-                # add each found object to an object collection
-
-
-
     def get_yaw_pitch_roll(self,target_frame,source_frame):
          # **Assuming /tf2 topic is being broadcasted= 
         tf_buffer = tf2_ros.Buffer()
@@ -184,10 +159,10 @@ class Plan():
             return
             
         
-    def print_end_effector_pose(self):
+    def print_end_effector_pose(self,commander_name):
 
         #Get the current position of end effector link
-        pose_values = self.commanders.item("arm_group").get_current_pose().pose
+        pose_values = self.commanders.item(commander_name).get_current_pose().pose
         rospy.loginfo('x:' + format(pose_values.orientation.x) + ' y:'+ format(pose_values.orientation.y) + ' z:' + format(pose_values.orientation.z) + ' w:' + format(pose_values.orientation.w))
         # Convert Quaternion to Euler (Roll, Pitch, Yaw)
         q_x = pose_values.orientation.x
@@ -205,7 +180,7 @@ class Plan():
 
         #Print the values
         rospy.loginfo('\033[32m' + 
-                                "\n" + "End-Effector ({}) Pose: \n\n".format(self.commanders.item("arm_group").end_effector_link()) + 
+                                "\n" + "End-Effector ({}) Pose: \n\n".format(self.commanders.item(commander_name).end_effector_link()) + 
                                 "x: {}\n".format(pose_values.position.x) +  "y: {}\n".format(pose_values.position.y) +    "z: {}\n\n".format(pose_values.position.z) + 
                                 "roll: {}\n".format(roll) + "pitch: {}\n".format(pitch) + "yaw: {}\n".format(yaw) +
                                 '\033[0m')    
@@ -263,36 +238,128 @@ class Plan():
         current_pose.pose.position.x = goal_pose.pose.position.x + offset_x
         current_pose.pose.position.y = goal_pose.pose.position.y + offset_y
         current_pose.pose.position.z = goal_pose.pose.position.z + offset_z
-        current_pose.pose.orientation.w = goal_pose.pose.orientation.w
-        current_pose.pose.orientation.x = goal_pose.pose.orientation.x
-        current_pose.pose.orientation.y = goal_pose.pose.orientation.y
-        current_pose.pose.orientation.z = goal_pose.pose.orientation.z
-       
-        print (type(current_pose))
-        print (current_pose)
-        
-        commander.set_pose_target(current_pose,commander.get_end_effector_link())
-        commander.go(wait=True)
-      
+        current_pose.pose.orientation.w = 1.0
+        #current_pose.pose.orientation.w = goal_pose.pose.orientation.w 
+        #current_pose.pose.orientation.x = goal_pose.pose.orientation.x 
+        #current_pose.pose.orientation.y = goal_pose.pose.orientation.y 
+        #current_pose.pose.orientation.z = goal_pose.pose.orientation.z 
+        rospy.loginfo('x:' + format(goal_pose.pose.orientation.x) + ' y:'+ format(goal_pose.pose.orientation.y) + ' z:' + format(goal_pose.pose.orientation.z) + ' w:' + format(goal_pose.pose.orientation.w))
+        q_x = goal_pose.pose.orientation.x
+        q_y = goal_pose.pose.orientation.y
+        q_z = goal_pose.pose.orientation.z
+        q_w = goal_pose.pose.orientation.w
+    
 
- 
+        #Store the quaternion position values in list
+        quaternion_list = [q_x, q_y, q_z, q_w]
+        #Covert the quaternion values to roll, pitch and yaw
+        (roll, pitch, yaw) = euler_from_quaternion(quaternion_list)
+        x = goal_pose.pose.position.x 
+        y = goal_pose.pose.position.y
+        z = goal_pose.pose.position.z
+       
+                #Print the values
+        rospy.loginfo('\033[32m' + 
+                                "\n" + "End-Effector ({}) Pose: \n\n".format(self.commanders.item(commander_name).end_effector_link()) + 
+                                "x: {}\n".format(goal_pose.pose.position.x) +  "y: {}\n".format(goal_pose.pose.position.y) +    "z: {}\n\n".format(goal_pose.pose.position.z) + 
+                                "roll: {}\n".format(roll) + "pitch: {}\n".format(pitch) + "yaw: {}\n".format(yaw) +
+                                '\033[0m')    
+        #self.Pose(commander_name,x=x,y=y,z=z,Y=yaw,P=pitch,R=roll)
+        commander.set_pose_target(current_pose,commander.get_end_effector_link())
+        result = commander.go(wait=True)
+        print(result)
+
+class find_objects():
+    objects = []
+
+    def __init__(self) -> None:
+        roscpp_initialize(sys.argv)
+        rospy.init_node('impact_motion', anonymous=True)
+        self.conveyor = Conveyor()
+        self.objFramePrefix = "object"
+        self.targetFrameId = rospy.get_param("~target_frame_id", "ar3_base_link")
+        self.objFramePrefix = rospy.get_param("~object_prefix", self.objFramePrefix)
+        self.subs = rospy.Subscriber("objectsStamped", ObjectsStamped, self.objectsDetectedCallback)
+        self.tf_buffer = tf2_ros.Buffer()
+        self.tfListener = tf2_ros.TransformListener(self.tf_buffer)
+
+    def __del__(self):
+        roscpp_shutdown()
+
+    def objectsDetectedCallback(self,msg):
         
+        if msg.objects.data:
+            multiSubId = ord('b')
+            previousId = -1
+            for i in range(0, len(msg.objects.data), 12):
+                # get data
+                id = int(msg.objects.data[i])
+
+                multiSuffix = ""
+                if id == previousId:
+                    multiSuffix = "" + chr(multiSubId)
+                    multiSubId += 1
+                else:
+                    multiSubId = ord('b')
+                previousId = id
+                  # "object1", "object_1_b", "object_1_c", "object_2"
+                objectFrameId = "{}{}{}".format(self.objFramePrefix, '_' + str(id), multiSuffix)
+                if objectFrameId in self.objects:
+                   # print(str(len(self.objects)))
+                    pass
+                else: 
+                  print('adding object to list')
+                  self.objects.append(objectFrameId)
+                  sleep(1.0)
+                  self.conveyor.speed(0)
+                  sleep(2.0)
+                  print("starting pickup code")
+                  self.Pickup_object()
+                # add each found object to an object collection
+
+    def Pickup_object(self):
+        #arm = "arm_group"
+        arm = "arm_gripper_group"
+        gripper = "gripper_group"
+        ar3="arm_group"
+        #gripper = "gripper_group"
+        print("creating planning object")
+        p = Plan(arm,gripper,ar3)
+        _ = p
+        print(p.commanders.item(arm).end_effector_link())
+        _.Pose("gripper_group","open")
+        _.move_to_object(arm,"object_18",offset_z=0.02)
+        _.Pose(arm,z=-0.02)
+      #  _.Pose(arm,x=-0.1817,y=-0.40665,z=0.531,Y=-0.8140686097480452,P=-1.305614646284523,R=0.8186871771462988)
+        # get the name of the objects
+       # try:
+           
+           
+       # except:
+       #     self.objects.remove("object_18")
+
+def Solution_Start():
+       # c = Conveyor()
+       # c.speed(15)
+        f = find_objects()
+        #f.Pickup_object()
+       # arm = "arm_gripper_group"
+       # gripper = "gripper_group"
+      #  p = Plan(arm,gripper)
+      #  _ = p
+       # _.Pose(gripper,"open")
+       # _.Pose(arm,"stand")
+        # get the name of the objects
+      #  _.move_to_object(arm,"object_14",offset_x= -0.2,offset_z=0.1)
+       # _.Pose(arm,z=-0.1)
+       # _.commanders.item(gripper).set_joint("left_finger_joint",0.145) 
+      #  _.Pose(arm,"ready") 
+
      
 if __name__ == "__main__":
     try:
-        arm = "arm_group"
-        gripper = "gripper_group"
-        p = Plan(arm,gripper)
-        _ = p
-        _.Pose(gripper,"open")
-        _.Pose(arm,"stand")
-        # get the name of the objects
-        _.move_to_object(arm,"object_14",offset_x= -0.2,offset_z=0.1)
-        _.Pose(arm,z=-0.1)
-       # _.commanders.item(gripper).set_joint("left_finger_joint",0.145) 
-      #  _.Pose(arm,"ready") 
-       
-  #      rospy.spin()
+        Solution_Start()
+        rospy.spin()
     except rospy.ROSInterruptException:
         pass
 

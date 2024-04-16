@@ -42,8 +42,8 @@ def Xacro(project_name):
     return my_robot
 
 if __name__ == "__main__":
-    xml = Robot(Xacro("wheeltec_gripper"))
-    print(len(str(xml)))
+    xml = Robot(Xacro("conveyor"))
+    print(xml)
 
 
  
