@@ -75,7 +75,7 @@ class Conveyor():
     def __init__(self):
         rospy.wait_for_service('/conveyor/control')
         print('converyor control running')
-
+        
     def conveyor_service_result(self,msg):
         print(msg)
         return msg
@@ -267,7 +267,7 @@ class Plan():
         #self.Pose(commander_name,x=x,y=y,z=z,Y=yaw,P=pitch,R=roll)
         commander.set_pose_target(current_pose,commander.get_end_effector_link())
         result = commander.go(wait=True)
-        print(result)
+        return result
 
 class find_objects():
     objects = []
@@ -309,15 +309,18 @@ class find_objects():
                     pass
                 else: 
                   print('adding object to list')
+                  print (objectFrameId)
                   self.objects.append(objectFrameId)
-                  sleep(1.0)
+                  sleep(1.65)
                   self.conveyor.speed(0)
                   sleep(2.0)
                   print("starting pickup code")
-                  self.Pickup_object()
+                  self.Pickup_object(objectFrameId)
+                  
                 # add each found object to an object collection
 
-    def Pickup_object(self):
+    def Pickup_object(self,object_name):
+        c = Conveyor()
         #arm = "arm_group"
         arm = "arm_gripper_group"
         gripper = "gripper_group"
@@ -327,20 +330,32 @@ class find_objects():
         p = Plan(arm,gripper,ar3)
         _ = p
         print(p.commanders.item(arm).end_effector_link())
-        _.Pose("gripper_group","open")
-        _.move_to_object(arm,"object_18",offset_z=0.02)
-        _.Pose(arm,z=-0.02)
+        
+        try:
+            _.Pose(gripper,"open")
+            result =  _.move_to_object(arm,object_name,offset_y=-0.025, offset_z=0.04,offset_x=-0.05)
+            if result == True:
+                _.Pose(arm,z=-0.0485)
+                _.Pose(arm,x=0.055)
+                _.commanders.item(gripper).set_joint("left_finger_joint",0.545) 
+                
+            else:
+                c.speed(15)
+                _.Pose(ar3,"stand")
+        except:
+            c.speed(15)
+            _.Pose(arm,"stand")
+            self.objects.remove(object_name)
       #  _.Pose(arm,x=-0.1817,y=-0.40665,z=0.531,Y=-0.8140686097480452,P=-1.305614646284523,R=0.8186871771462988)
         # get the name of the objects
        # try:
            
            
        # except:
-       #     self.objects.remove("object_18")
+       #     
 
 def Solution_Start():
-       # c = Conveyor()
-       # c.speed(15)
+
         f = find_objects()
         #f.Pickup_object()
        # arm = "arm_gripper_group"
