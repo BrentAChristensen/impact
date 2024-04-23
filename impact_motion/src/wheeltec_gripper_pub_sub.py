@@ -17,7 +17,7 @@ class gripper_subscriber(object):
        
     def callback(self,ros_msg):
         self.gripper_state = ros_msg.points[0].positions[0]
-        self._pub = self.gripper_state
+        self._pub (self.gripper_state)
         print (self.gripper_state)
 
 
