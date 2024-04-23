@@ -2,9 +2,7 @@
 #rosrun rosserial_python serial_node.py _port:=COM3 _baud:=9600
 #rostopic pub /gripper_command std_msgs/String 'close' -1
 import rospy
-from std_msgs.msg import Empty
 from std_msgs.msg import String,Float32
-import numpy
 from trajectory_msgs.msg import JointTrajectory
 
 
