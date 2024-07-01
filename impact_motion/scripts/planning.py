@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys
+
 import rospy
 from moveit_commander import RobotCommander, MoveGroupCommander,PlanningSceneInterface, roscpp_initialize, roscpp_shutdown
 import geometry_msgs.msg
@@ -15,12 +15,10 @@ from sensor_msgs.msg import JointState
 from controller_manager_msgs.srv import SwitchController, SwitchControllerRequest
 from threading import Timer
 from geometry_msgs.msg import Pose
-from find_object_2d.msg import ObjectsStamped
 import tf2_ros
 import tf2_geometry_msgs
 from std_msgs.msg import String
-from gazebo_conveyor.srv import ConveyorBeltControl
-from time import sleep
+
 
 
 
@@ -69,24 +67,6 @@ class Commanders():
               i = i +1
          return str(i)
 
-
-class Conveyor():
-
-    def __init__(self):
-        rospy.wait_for_service('/conveyor/control')
-        print('converyor control running')
-        
-    def conveyor_service_result(self,msg):
-        print(msg)
-        return msg
-
-    def speed(self,value):
-        try:
-            conveyor_speed = rospy.ServiceProxy('/conveyor/control', ConveyorBeltControl)
-            result = conveyor_speed(value)
-            return 'true'
-        except rospy.ServiceException as e:
-            print("Service call failed: %s"%e)
 
 
 class Plan():
@@ -269,114 +249,6 @@ class Plan():
         result = commander.go(wait=True)
         return result
 
-class find_objects():
-    objects = []
-
-    def __init__(self) -> None:
-        roscpp_initialize(sys.argv)
-        rospy.init_node('impact_motion', anonymous=True)
-        self.conveyor = Conveyor()
-        self.objFramePrefix = "object"
-        self.targetFrameId = rospy.get_param("~target_frame_id", "ar3_base_link")
-        self.objFramePrefix = rospy.get_param("~object_prefix", self.objFramePrefix)
-        self.subs = rospy.Subscriber("objectsStamped", ObjectsStamped, self.objectsDetectedCallback)
-        self.tf_buffer = tf2_ros.Buffer()
-        self.tfListener = tf2_ros.TransformListener(self.tf_buffer)
-
-    def __del__(self):
-        roscpp_shutdown()
-
-    def objectsDetectedCallback(self,msg):
-        
-        if msg.objects.data:
-            multiSubId = ord('b')
-            previousId = -1
-            for i in range(0, len(msg.objects.data), 12):
-                # get data
-                id = int(msg.objects.data[i])
-
-                multiSuffix = ""
-                if id == previousId:
-                    multiSuffix = "" + chr(multiSubId)
-                    multiSubId += 1
-                else:
-                    multiSubId = ord('b')
-                previousId = id
-                  # "object1", "object_1_b", "object_1_c", "object_2"
-                objectFrameId = "{}{}{}".format(self.objFramePrefix, '_' + str(id), multiSuffix)
-                if objectFrameId in self.objects:
-                   # print(str(len(self.objects)))
-                    pass
-                else: 
-                  print('adding object to list')
-                  print (objectFrameId)
-                  self.objects.append(objectFrameId)
-                  sleep(1.65)
-                  self.conveyor.speed(0)
-                  sleep(2.0)
-                  print("starting pickup code")
-                  self.Pickup_object(objectFrameId)
-                  
-                # add each found object to an object collection
-
-    def Pickup_object(self,object_name):
-        c = Conveyor()
-        #arm = "arm_group"
-        arm = "arm_gripper_group"
-        gripper = "gripper_group"
-        ar3="arm_group"
-        #gripper = "gripper_group"
-        print("creating planning object")
-        p = Plan(arm,gripper,ar3)
-        _ = p
-        print(p.commanders.item(arm).end_effector_link())
-        
-        try:
-            _.Pose(gripper,"open")
-            result =  _.move_to_object(arm,object_name,offset_y=-0.025, offset_z=0.04,offset_x=-0.05)
-            if result == True:
-                _.Pose(arm,z=-0.0485)
-                _.Pose(arm,x=0.055)
-                _.commanders.item(gripper).set_joint("left_finger_joint",0.545) 
-                
-            else:
-                c.speed(15)
-                _.Pose(ar3,"stand")
-        except:
-            c.speed(15)
-            _.Pose(arm,"stand")
-            self.objects.remove(object_name)
-      #  _.Pose(arm,x=-0.1817,y=-0.40665,z=0.531,Y=-0.8140686097480452,P=-1.305614646284523,R=0.8186871771462988)
-        # get the name of the objects
-       # try:
-           
-           
-       # except:
-       #     
-
-def Solution_Start():
-
-        f = find_objects()
-        #f.Pickup_object()
-       # arm = "arm_gripper_group"
-       # gripper = "gripper_group"
-      #  p = Plan(arm,gripper)
-      #  _ = p
-       # _.Pose(gripper,"open")
-       # _.Pose(arm,"stand")
-        # get the name of the objects
-      #  _.move_to_object(arm,"object_14",offset_x= -0.2,offset_z=0.1)
-       # _.Pose(arm,z=-0.1)
-       # _.commanders.item(gripper).set_joint("left_finger_joint",0.145) 
-      #  _.Pose(arm,"ready") 
-
-     
-if __name__ == "__main__":
-    try:
-        Solution_Start()
-        rospy.spin()
-    except rospy.ROSInterruptException:
-        pass
 
 
 
