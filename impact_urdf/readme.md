@@ -1,9 +1,9 @@
 brent generated key for anthony
 
-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
+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
 
 
-git clone https://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@github.com/BrentAChristensen/impact_urdf.git
+git clone https://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@github.com/BrentAChristensen/impact_urdf.git
 
 anthony generated key for brent
 
